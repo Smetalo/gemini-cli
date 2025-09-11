@@ -173,20 +173,9 @@ export function isWithinRoot(
   pathToCheck: string,
   rootDirectory: string,
 ): boolean {
-  const normalizedPathToCheck = path.resolve(pathToCheck);
-  const normalizedRootDirectory = path.resolve(rootDirectory);
-
-  // Ensure the rootDirectory path ends with a separator for correct startsWith comparison,
-  // unless it's the root path itself (e.g., '/' or 'C:\').
-  const rootWithSeparator =
-    normalizedRootDirectory === path.sep ||
-    normalizedRootDirectory.endsWith(path.sep)
-      ? normalizedRootDirectory
-      : normalizedRootDirectory + path.sep;
-
+  const relativePath = path.relative(rootDirectory, pathToCheck);
   return (
-    normalizedPathToCheck === normalizedRootDirectory ||
-    normalizedPathToCheck.startsWith(rootWithSeparator)
+    !relativePath.startsWith('..') && !path.isAbsolute(relativePath)
   );
 }
 
