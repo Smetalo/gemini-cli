@@ -132,6 +132,16 @@ describe('fileUtils', () => {
       const rootSuper = path.resolve('/project/root/sub');
       expect(isWithinRoot(pathToCheckSuper, rootSuper)).toBe(false);
     });
+
+    it('should return true for paths inside the root on case-insensitive systems', () => {
+      // This test is specifically for case-insensitive file systems like Windows and macOS.
+      if (process.platform === 'linux') {
+        return;
+      }
+      const root = path.resolve('/project/root');
+      const pathToCheck = path.resolve('/PROJECT/root/a/b/c');
+      expect(isWithinRoot(pathToCheck, root)).toBe(true);
+    });
   });
 
   describe('fileExists', () => {
